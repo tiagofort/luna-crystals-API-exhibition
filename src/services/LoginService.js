@@ -1,8 +1,8 @@
 require('dotenv').config();
-const usuariosModel = require('./../models/Usuarios')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
-const ErrorHandler = require('../errors/ErrorHandler')
+const usuariosModel = require('./../models/Usuarios');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const ErrorHandler = require('../errors/ErrorHandler');
 
 module.exports = {
 

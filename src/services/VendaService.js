@@ -4,6 +4,7 @@ const estoqueModel = require('./../models/Estoque');
 const usuarioModel = require('./../models/Usuarios');
 const codVenda = require('./../Utilities/GerarCodigo');
 const ordenar = require('./../Utilities/utils');
+const ErrorHandler = require('../errors/ErrorHandler');
 
 module.exports = {
 
@@ -11,65 +12,57 @@ module.exports = {
         var entradas = await estoqueModel.find({id_produto: req.body.id_item, tipo: 0});       
         var saidas = await estoqueModel.find({id_produto: req.body.id_item, tipo: 1});
 
-        if(entradas.length == 0){
-            return res.status(404).send({
-                message: 'Produto nao possui movimentacao de estoque!'
-            })
-        }
+        try{
+            if(entradas.length == 0){
+                throw new ErrorHandler('This product has no invetory movement', 404);
+            }
 
-        var qtd_entradas = 0;
-        var qtd_saidas = 0;
-        for(let i = 0; i < entradas.length; i ++){
-            qtd_entradas = qtd_entradas + entradas[i].qtd;
-        }
-        for(let x = 0; x < saidas.length; x++){
-            qtd_saidas = qtd_saidas + saidas[x].qtd;
-        }
+            var qtd_entradas = 0;
+            var qtd_saidas = 0;
+            for(let i = 0; i < entradas.length; i ++){
+                qtd_entradas = qtd_entradas + entradas[i].qtd;
+            }
+            for(let x = 0; x < saidas.length; x++){
+                qtd_saidas = qtd_saidas + saidas[x].qtd;
+            }
 
-        if(qtd_entradas == 0){
-            return res.status(404).send({
-                message: 'Produto nao possui estoque!'
-            })
-        }
+            if(qtd_entradas == 0){
+                throw new ErrorHandler('The product selected has no inventory to be sold', 404);
+            }
+            
+            if(qtd_entradas < qtd_saidas){
+                throw new ErrorHandler('This product has a negative inventory', 404);
+            }
         
-        if(qtd_entradas < qtd_saidas){
-            return res.status(404).send({
-                message: 'Estoque do produto esta negativo!'
-            })
-        }
-        
-        if(req.body.qtd <= (qtd_entradas - qtd_saidas)){
-            let estoque = new Object();
-            estoque.id_produto = req.body.id_item;
-            estoque.qtd = req.body.qtd;
-            estoque.vlr_unidade = req.body.vlr_unit;
-            estoque.tipo = 1;
+            if(req.body.qtd <= (qtd_entradas - qtd_saidas)){
+                let estoque = new Object();
+                estoque.id_produto = req.body.id_item;
+                estoque.qtd = req.body.qtd;
+                estoque.vlr_unidade = req.body.vlr_unit;
+                estoque.tipo = 1;
 
-            const codigo = codVenda.gerarCodVenda();
-            let venda = new Object();
-            venda = req.body;
-            venda.cod_venda = codigo;
-            try{
+                const codigo = codVenda.gerarCodVenda();
+                let venda = new Object();
+                venda = req.body;
+                venda.cod_venda = codigo;
+
                 let idVenda = await vendaModel.create(venda);
                 estoque.id_venda = idVenda._id;
                 await estoqueModel.create(estoque);
                 res.send("success");
-            }catch (err){
-                res.status(500).json({
-                message: err.message
-             });
-            } 
-        }else{    
-            return res.status(404).send({
-                message: 'O estoque e menor que a quantidade de saida informada'
-            })
-        }
+
+                    
+            }else{    
+                throw new ErrorHandler('You are tryng to sell more than you have as inventory', 404);
+            }
+        }catch (err){
+            res.status(err.statusCode).json(err.toJson());
+        } 
          
     },
 
     buscarVendas: async (req, res) => {
         const vendas = await vendaModel.find();
-
         try {
             res.json(vendas);
         } catch (err) {
