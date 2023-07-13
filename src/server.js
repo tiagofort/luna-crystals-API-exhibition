@@ -20,10 +20,7 @@ const pedraRoute = require('./routes/PedraRoute');
 
 const app = express();
 app.use(cookieParser());
-app.use(cors({
-    origin: 'https://luna-adm-app-exhibition-54f540dbf795.herokuapp.com/',
-    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
-}));
+app.use(cors());
 
 const db = require('./db');
 db.connect();
@@ -31,7 +28,7 @@ db.connect();
 app.use(express.json());
 app.use(json2xls.middleware);
 
-app.use('/login', loginRoute, cors());
+app.use('/login', loginRoute);
 app.use('/usuario', usuarioRoute);
 app.use('/item', itemRoute)
 app.use('/menu', menuRoute);
