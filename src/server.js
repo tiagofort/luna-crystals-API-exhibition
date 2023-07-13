@@ -20,7 +20,10 @@ const pedraRoute = require('./routes/PedraRoute');
 
 const app = express();
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
+}));
 
 const db = require('./db');
 db.connect();
