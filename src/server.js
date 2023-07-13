@@ -1,6 +1,6 @@
 require('dotenv').config();
-var cors = require('cors')
 const express = require('express');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const json2xls = require('json2xls');
 
@@ -20,10 +20,7 @@ const pedraRoute = require('./routes/PedraRoute');
 
 const app = express();
 app.use(cookieParser());
-app.use(cors({
-    origin: ['*','https://luna-adm-app-exhibition-54f540dbf795.herokuapp.com/',,'http://localhost:3000/'],
-    credentials: true
-}));
+app.use(cors());
 
 const db = require('./db');
 db.connect();
