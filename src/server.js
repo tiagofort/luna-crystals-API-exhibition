@@ -21,7 +21,7 @@ const pedraRoute = require('./routes/PedraRoute');
 const app = express();
 app.use(cookieParser());
 app.use(cors({
-    origin: ['https://luna-adm-app-exhibition-54f540dbf795.herokuapp.com/',"http://localhost:3000/"],
+    origin: ['*','https://luna-adm-app-exhibition-54f540dbf795.herokuapp.com/',,'http://localhost:3000/'],
     credentials: true
 }));
 
