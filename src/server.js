@@ -28,7 +28,7 @@ db.connect();
 app.use(express.json());
 app.use(json2xls.middleware);
 
-app.use('/login', loginRoute);
+app.use('/login', loginRoute, cors());
 app.use('/usuario', usuarioRoute);
 app.use('/item', itemRoute)
 app.use('/menu', menuRoute);
