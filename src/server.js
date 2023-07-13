@@ -20,7 +20,10 @@ const pedraRoute = require('./routes/PedraRoute');
 
 const app = express();
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+    origin: 'https://luna-adm-app-exhibition-54f540dbf795.herokuapp.com/*',
+    credentials: true
+}));
 
 const db = require('./db');
 db.connect();
