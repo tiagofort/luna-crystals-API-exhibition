@@ -35,7 +35,7 @@ module.exports = {
     },
 
     autenticarCliente: async (req, res) => {
-      const user = await usuariosModel.findOne({email: req.body.email, tipo: 1, acesso: 0})
+        const user = await usuariosModel.findOne({email: req.body.email, tipo: 1, acesso: 0});
         try {
             if(!user){
               throw new ErrorHandler('EMAIL NOT REGISTERED', 404);

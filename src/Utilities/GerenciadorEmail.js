@@ -34,7 +34,7 @@ function opcoesRecuperacaoSenha(from, to, subject, token){
                         '<p style="margin-bottom: 30px;">Please, click on the link bellow to proceed with your password change request.</p>' +
 
                         '<p style="margin-bottom: 20px;">Your request will expire in 10 minutes. After that, you will have to make a new request.</p>' +
-                        `<a href="${process.env.URL_FRONTEND_ADM}/redefinir_senha/key=${token}">Click here to change your password</a>` +
+                        `<a href="${process.env.URL_FRONTEND_ADM}redefinir_senha/key=${token}">Click here to change your password</a>` +
 
                         '<p>Thank you,</p>' +
                         '<div>Luna Crystals</div>' +
@@ -77,7 +77,7 @@ function opcoesConfirmarCadastro(from, to, subject){
                           '<p style="margin-bottom: 30px;">Please, click on the link bellow to confirm your create account request.</p>' +
 
                           '<p style="margin-bottom: 20px;">It`s a procedure to make sure you are not a robot or scammer.</p>' +
-                          `<a href="${process.env.URL_FRONTEND_CLIENTE}/confirmar_email/email=${to}">Click here to confirm your email</a>`+
+                          `<a href="${process.env.URL_FRONTEND_CLIENTE}confirmar_email/email=${to}">Click here to confirm your email</a>`+
 
                           '<p>Thank you,</p>' +
                           '<div>Luna Crystals</div>' +
