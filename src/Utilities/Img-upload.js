@@ -28,7 +28,7 @@ const upload = multer({
     storage: multerS3({
       acl: 'public-read',
       s3 : s3,
-      bucket: 'lunapedraria-teste',
+      bucket: process.env.IMAGE_BUCKET,
       metadata: function (req, file, cb) {
         cb(null, {fieldName: file.fieldname});
       },
