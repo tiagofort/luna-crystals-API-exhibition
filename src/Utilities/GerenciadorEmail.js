@@ -10,7 +10,9 @@ var transporter = nodemailer.createTransport({
 });
 
 
-function opcoesRecuperacaoSenha(from, to, subject, token){
+function opcoesRecuperacaoSenha(from, to, subject, token, tipo){
+  const link_destination = tipo == 1 ? process.env.URL_FRONTEND_CLIENTE : process.env.URL_FRONTEND_ADM;
+  console.log(link_destination)
   let opcoesEmail = {
     from: from,
     to: to,
@@ -34,7 +36,7 @@ function opcoesRecuperacaoSenha(from, to, subject, token){
                         '<p style="margin-bottom: 30px;">Please, click on the link bellow to proceed with your password change request.</p>' +
 
                         '<p style="margin-bottom: 20px;">Your request will expire in 10 minutes. After that, you will have to make a new request.</p>' +
-                        `<a href="${process.env.URL_FRONTEND_ADM}redefinir_senha/key=${token}">Click here to change your password</a>` +
+                        `<a href="${link_destination}change_password/key=${token}">Click here to change your password</a>` +
 
                         '<p>Thank you,</p>' +
                         '<div>Luna Crystals</div>' +

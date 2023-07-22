@@ -5,6 +5,7 @@ const vendaModel = require('../models/Venda');
 const produtoModel = require('../models/Item');
 const tokenEmail = require('./../token/token');
 const enviarEmail = require('./../Utilities/GerenciadorEmail');
+const ErrorHandler = require('../errors/ErrorHandler');
 
 const salt = bcrypt.genSaltSync(10)
 
@@ -42,20 +43,25 @@ module. exports = {
   },
 
   esqueceuSenha: async (req, res) => {
-    const emailVerificado = await usuariosModel.findOne({email : req.body.email})
-    if(emailVerificado.email){
-      const token = tokenEmail.criarTokenEmail(emailVerificado.email);
-      res.status(200).send(token);
-      try{
-        enviarEmail.opcoesRecuperacaoSenha('lunapedraria@gmail.com', emailVerificado.email, 'Password Recovery - Luna Pedraria', token)
-      } catch (error){
-        res.status(500).send(error);
-      }
-    } else {
-      res.status(400).json({
-        message: 'Email nao encontrado'
-      })
-    }
+    const emailVerificado = await usuariosModel.findOne({email : req.body.email});
+    try{
+
+        if(emailVerificado){
+          const token = tokenEmail.criarTokenEmail(emailVerificado.email);
+          res.status(200).send(token);
+          try{
+            enviarEmail.opcoesRecuperacaoSenha('lunapedraria@gmail.com', emailVerificado.email, 'Password Recovery - Luna Pedraria', token, emailVerificado.tipo)
+          } catch (error){
+            res.status(500).send(error);
+          }
+        }
+
+        if(!emailVerificado){
+          throw new ErrorHandler('EMAIL NOT FOUND', 401); 
+        }
+    }catch (error) {
+      res.status(error.statusCode).json(error.toJson());
+    }   
   },
 
   alterarSenha: async (req, res) => {
